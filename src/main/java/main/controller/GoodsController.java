@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
  * @author murad_isgandar
  */
+// Rest Api server
 @RestController
 @RequestMapping("/goods")
 public class GoodsController {
@@ -69,22 +71,25 @@ public class GoodsController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity updateGoods(@PathVariable(value = "id") Integer id, @RequestBody GoodsDTO goodsDTO) {
-        if(goodsServiceInter.updateGoods(id, goodsDTO)){
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(("Goods by id = "+ id + " are updated successfully"), 200, goodsServiceInter.getGoodsById(id)));
-        }
-        else{
+        if (goodsServiceInter.updateGoods(id, goodsDTO)) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(("Goods by id = " + id + " are updated successfully"), 200, goodsServiceInter.getGoodsById(id)));
+        } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO("Failed in update operation", 500, goodsDTO));
         }
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity deleteGoods(@PathVariable(value = "id") Integer id) {
-        if(goodsServiceInter.deleteGoods(id)){
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(("Goods by id = "+ id + " are deleted successfully"), 200, ("Goods' id = "+id)));
-        }
-        else{
+        if (goodsServiceInter.deleteGoods(id)) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(("Goods by id = " + id + " are deleted successfully"), 200, ("Goods' id = " + id)));
+        } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO("Failed in delete operation", 500, null));
         }
+    }
+
+    @GetMapping(value = "/{gName}/{quantity}")
+    public Integer sendGoods(@PathVariable(value = "gName") String name, @PathVariable(value = "quantity") Integer quantity) {
+        return goodsServiceInter.sendGoods(name, quantity);
     }
 
 }

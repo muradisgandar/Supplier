@@ -25,4 +25,6 @@ public interface GoodsServiceInter {
     
     public boolean deleteGoods(Integer id);
     
+    public Integer sendGoods(String name,Integer quantity);
+    
 }

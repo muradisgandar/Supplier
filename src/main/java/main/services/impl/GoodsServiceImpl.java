@@ -87,7 +87,7 @@ public class GoodsServiceImpl implements GoodsServiceInter {
         } catch (Exception e) {
             System.out.println("Failed in update operation");
         }
-        
+
         return false;
     }
 
@@ -99,8 +99,28 @@ public class GoodsServiceImpl implements GoodsServiceInter {
         } catch (Exception e) {
             System.out.println("Failed in delete operation");
         }
-        
+
         return false;
+    }
+
+    @Override
+    public Integer sendGoods(String name, Integer quantity) {
+        Goods goods = goodsRepository.findByName(name);
+        int q = goods.getQuantity();
+        if (q >= quantity) {
+            int newQuantity = q - quantity;
+            goods.setQuantity(newQuantity);
+            goodsRepository.save(goods);
+            return quantity;
+        } else if (q < quantity) {
+            goods.setQuantity(0);
+            goodsRepository.save(goods);
+            return q;
+        } else if (q == 0) {
+            return null;
+        }
+
+        return null;
     }
 
 }
