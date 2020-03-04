@@ -7,9 +7,11 @@ package main.controller;
 
 import java.util.List;
 import main.dto.GoodsDTO;
+import main.dto.OrdersDTO;
 import main.dto.ResponseDTO;
 import main.entities.Goods;
 import main.mapper.GoodsMapper;
+import main.mapper.OrderMapper;
 import main.services.inter.GoodsServiceInter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,7 +74,7 @@ public class GoodsController {
     @PutMapping(value = "/{id}")
     public ResponseEntity updateGoods(@PathVariable(value = "id") Integer id, @RequestBody GoodsDTO goodsDTO) {
         if (goodsServiceInter.updateGoods(id, goodsDTO)) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(("Goods by id = " + id + " are updated successfully"), 200, goodsServiceInter.getGoodsById(id)));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(("Goods by id = " + id + " are updated successfully"), 200, new GoodsMapper().mapEntityToDto(goodsServiceInter.getGoodsById(id))));
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO("Failed in update operation", 500, goodsDTO));
         }
@@ -87,8 +89,8 @@ public class GoodsController {
         }
     }
 
-    @GetMapping(value = "/{gName}/{quantity}")
-    public Integer sendGoods(@PathVariable(value = "gName") String name, @PathVariable(value = "quantity") Integer quantity) {
+    @GetMapping(value = "/gName/{quantity}")
+    public Integer sendGoods(@RequestParam(value = "gName") String name, @PathVariable(value = "quantity") Integer quantity) {
         return goodsServiceInter.sendGoods(name, quantity);
     }
 

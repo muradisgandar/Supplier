@@ -7,8 +7,10 @@ package main.services.impl;
 
 import java.util.List;
 import main.dao.GoodsRepository;
+import main.dao.OrdersRepository;
 import main.dto.GoodsDTO;
 import main.entities.Goods;
+import main.entities.Orders;
 import main.services.inter.GoodsServiceInter;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +23,11 @@ public class GoodsServiceImpl implements GoodsServiceInter {
 
     private final GoodsRepository goodsRepository;
 
-    public GoodsServiceImpl(GoodsRepository goodsRepository) {
+    private final OrdersRepository ordersRepository;
+
+    public GoodsServiceImpl(GoodsRepository goodsRepository, OrdersRepository ordersRepository) {
         this.goodsRepository = goodsRepository;
+        this.ordersRepository = ordersRepository;
     }
 
     @Override
@@ -112,15 +117,28 @@ public class GoodsServiceImpl implements GoodsServiceInter {
             goods.setQuantity(newQuantity);
             goodsRepository.save(goods);
             return quantity;
-        } else if (q < quantity) {
+        } else if (q < quantity && q != 0) {
+            int newQuantity = quantity - q;
+            Orders order = new Orders();
+            order.setGoodsId(goods);
+            order.setOQuantity(newQuantity);
+
+            ordersRepository.save(order);
             goods.setQuantity(0);
+            
             goodsRepository.save(goods);
-            return q;
+            return q; // if q < quantity , then send all goods which are in warehouse 
         } else if (q == 0) {
-            return null;
+            Orders order = new Orders();
+            order.setGoodsId(goods);
+            order.setOQuantity(quantity);
+
+            System.out.println("goods id " + order.getGoodsId().getId() + "quantity " + order.getOQuantity());
+            ordersRepository.save(order);
+            return 0;
         }
 
-        return null;
+        return 0;
     }
 
 }

@@ -7,8 +7,8 @@ package main.mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import main.dto.GoodsDTO;
-import main.entities.Goods;
+import main.dto.OrdersDTO;
+import main.entities.Orders;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,23 +16,20 @@ import org.springframework.stereotype.Component;
  * @author murad_isgandar
  */
 @Component
-public class GoodsMapper {
-
-    public GoodsDTO mapEntityToDto(Goods goods) {
-        return GoodsDTO.builder()
-                .id(goods.getId())
-                .name(goods.getName())
-                .quantity(goods.getQuantity())
-                .cost(goods.getCost())
+public class OrderMapper {
+    
+    public OrdersDTO mapEntityToDto(Orders orders){
+        return OrdersDTO.builder()
+                .id(orders.getId())
+                .oQuantity(orders.getOQuantity())
                 .build();
-
+        
     }
-
-    public List<GoodsDTO> mapEntityListToDtoList(List<Goods> goods) {
-        return goods.stream()
+    
+    public List<OrdersDTO> mapEntityListToDtoList(List<Orders> orders){
+        return orders.stream()
                 .map(this::mapEntityToDto)
                 .collect(Collectors.toList());
-
+        
     }
-
 }

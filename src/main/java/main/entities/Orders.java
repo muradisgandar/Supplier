@@ -6,18 +6,16 @@
 package main.entities;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,12 +26,12 @@ import lombok.NoArgsConstructor;
  * @author murad_isgandar
  */
 @Entity
-@Table(name = "goods")
+@Table(name = "orders")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Goods implements Serializable {
+public class Orders implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -43,24 +41,19 @@ public class Goods implements Serializable {
     private Integer id;
     @Basic(optional = false)
 //    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "name")
-    private String name;
-    @Basic(optional = false)
-//    @NotNull
-    @Column(name = "quantity")
-    private int quantity;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Basic(optional = false)
-//    @NotNull
-    @Column(name = "cost")
-    private BigDecimal cost;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "goodsId")
-    private List<Orders> ordersList;
+    @Column(name = "oQuantity")
+    private int oQuantity;
+    @JoinColumn(name = "goodsId", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Goods goodsId;
 
-
-    public Goods(Integer id) {
+    public Orders(Integer id) {
         this.id = id;
+    }
+
+    public Orders(Integer id, int oQuantity) {
+        this.id = id;
+        this.oQuantity = oQuantity;
     }
 
     @Override
@@ -73,10 +66,10 @@ public class Goods implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Goods)) {
+        if (!(object instanceof Orders)) {
             return false;
         }
-        Goods other = (Goods) object;
+        Orders other = (Orders) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -85,7 +78,7 @@ public class Goods implements Serializable {
 
     @Override
     public String toString() {
-        return "com.company.main.entities.Goods[ id=" + id + " ]";
+        return "com.company.main.entities.Orders[ id=" + id + " ]";
     }
-    
+
 }
