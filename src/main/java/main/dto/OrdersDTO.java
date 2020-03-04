@@ -22,5 +22,6 @@ public class OrdersDTO {
     
     private Integer id;
     private int oQuantity;
+    private String goodsName;
     
 }

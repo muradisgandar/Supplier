@@ -22,6 +22,7 @@ public class OrderMapper {
         return OrdersDTO.builder()
                 .id(orders.getId())
                 .oQuantity(orders.getOQuantity())
+                .goodsName(orders.getGoodsId().getName())
                 .build();
         
     }

@@ -13,6 +13,7 @@ import main.entities.Goods;
 import main.mapper.GoodsMapper;
 import main.mapper.OrderMapper;
 import main.services.inter.GoodsServiceInter;
+import main.services.inter.OrdersServiceInter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,9 +36,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class GoodsController {
 
     private final GoodsServiceInter goodsServiceInter;
+    
+    private final OrdersServiceInter ordersServiceInter;
 
-    public GoodsController(GoodsServiceInter goodsServiceInter) {
+    public GoodsController(GoodsServiceInter goodsServiceInter,OrdersServiceInter ordersServiceInter) {
         this.goodsServiceInter = goodsServiceInter;
+        this.ordersServiceInter = ordersServiceInter;
     }
 
     @GetMapping
@@ -90,8 +94,8 @@ public class GoodsController {
     }
 
     @GetMapping(value = "/gName/{quantity}")
-    public Integer sendGoods(@RequestParam(value = "gName") String name, @PathVariable(value = "quantity") Integer quantity) {
-        return goodsServiceInter.sendGoods(name, quantity);
+    public Integer sendGoods(@RequestParam(value = "name") String name, @PathVariable(value = "quantity") Integer quantity) {
+        return ordersServiceInter.sendGoods(name, quantity);
     }
 
 }
