@@ -6,11 +6,14 @@
 package main.services.impl;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import main.dao.GoodsRepository;
 import main.dao.OrdersRepository;
 import main.entities.Goods;
 import main.entities.Orders;
 import main.services.inter.OrdersServiceInter;
+import main.tcpconnection.TCPServer;
 import org.springframework.stereotype.Service;
 
 /**
@@ -49,7 +52,7 @@ public class OrdersServiceImpl implements OrdersServiceInter {
         } catch (Exception e) {
             System.out.println("No such element founded");
         }
-        
+
         return null;
     }
 
@@ -68,12 +71,23 @@ public class OrdersServiceImpl implements OrdersServiceInter {
 
     @Override
     public Integer sendGoods(String name, Integer quantity) {
+        try {
+            TCPServer.recieveMessage();   // recieve order message from client
+        } catch (Exception ex) {
+            ex.getStackTrace();
+        }
         Goods goods = goodsRepository.findByName(name);
         int q = goods.getQuantity();
         if (q >= quantity) {
             int newQuantity = q - quantity;
             goods.setQuantity(newQuantity);
             goodsRepository.save(goods);
+
+            try {
+                TCPServer.sendMessage("We are sending " + quantity + " " + name + " computers");
+            } catch (Exception ex) {
+                ex.getStackTrace();
+            }
             return quantity;
         } else if (q < quantity && q > 0) {
             int newQuantity = quantity - q;
@@ -81,10 +95,21 @@ public class OrdersServiceImpl implements OrdersServiceInter {
             addOrder(goods, newQuantity);
             goods.setQuantity(0);
 
+            try {
+                TCPServer.sendMessage("We are sending only " + quantity + " of them " + name + " computers ," + " others will be send as soon as we get them");
+            } catch (Exception ex) {
+                ex.getStackTrace();
+            }
             goodsRepository.save(goods);
             return q; // if q < quantity , then send all goods which are in warehouse 
         } else if (q == 0) {
             addOrder(goods, quantity);
+            try {
+                TCPServer.sendMessage("We don't have any " + name + " computers in warehouse ," + "  we will send\n"
+                        + " the goods as soon as we get them ");
+            } catch (Exception ex) {
+                ex.getStackTrace();
+            }
             return 0;
         }
 
