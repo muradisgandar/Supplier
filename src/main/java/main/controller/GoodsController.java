@@ -5,6 +5,7 @@
  */
 package main.controller;
 
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import main.dto.GoodsDTO;
 import main.dto.OrdersDTO;
@@ -45,6 +46,7 @@ public class GoodsController {
     }
 
     @GetMapping
+    @ApiOperation(value = "get all goods from database")
     public ResponseEntity goods() {
         List<Goods> goods = goodsServiceInter.getAllGoods();
         if (goods != null && !goods.isEmpty()) {
@@ -56,6 +58,7 @@ public class GoodsController {
     }
 
     @GetMapping(path = "/{id}")
+    @ApiOperation(value = "get goods which are defined by id from database")
     public ResponseEntity goodsById(@PathVariable(value = "id") Integer id) {
         Goods goods = goodsServiceInter.getGoodsById(id);
         if (goods != null) {
@@ -66,6 +69,7 @@ public class GoodsController {
     }
 
     @PostMapping
+    @ApiOperation(value = "add goods to database")
     public ResponseEntity addGoods(@RequestBody GoodsDTO goodsDTO) {
         if (goodsServiceInter.addGoods(goodsDTO)) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO("Goods are inserted successfully", 200, goodsDTO));
@@ -76,6 +80,7 @@ public class GoodsController {
     }
 
     @PutMapping(value = "/{id}")
+    @ApiOperation(value = "update goods which are identified by sending id")
     public ResponseEntity updateGoods(@PathVariable(value = "id") Integer id, @RequestBody GoodsDTO goodsDTO) {
         if (goodsServiceInter.updateGoods(id, goodsDTO)) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(("Goods by id = " + id + " are updated successfully"), 200, new GoodsMapper().mapEntityToDto(goodsServiceInter.getGoodsById(id))));
@@ -85,6 +90,7 @@ public class GoodsController {
     }
 
     @DeleteMapping(value = "/{id}")
+    @ApiOperation(value = "delete goods which are identified by sending id")
     public ResponseEntity deleteGoods(@PathVariable(value = "id") Integer id) {
         if (goodsServiceInter.deleteGoods(id)) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(("Goods by id = " + id + " are deleted successfully"), 200, ("Goods' id = " + id)));
@@ -94,6 +100,7 @@ public class GoodsController {
     }
 
     @GetMapping(value = "/gName/{quantity}")
+    @ApiOperation(value = "get goods from database for sending to buyer")
     public Integer sendGoods(@RequestParam(value = "name") String name, @PathVariable(value = "quantity") Integer quantity) {
         return ordersServiceInter.sendGoods(name, quantity);
     }

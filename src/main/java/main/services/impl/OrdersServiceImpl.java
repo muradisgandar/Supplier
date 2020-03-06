@@ -6,8 +6,6 @@
 package main.services.impl;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import main.dao.GoodsRepository;
 import main.dao.OrdersRepository;
 import main.entities.Goods;
@@ -84,7 +82,7 @@ public class OrdersServiceImpl implements OrdersServiceInter {
             goodsRepository.save(goods);
 
             try {
-                TCPServer.sendMessage("We are sending " + quantity + " " + name + " computers");
+                TCPServer.sendMessage("We are sending " + quantity + " " + name + " computers\n");
             } catch (Exception ex) {
                 ex.getStackTrace();
             }
@@ -96,7 +94,7 @@ public class OrdersServiceImpl implements OrdersServiceInter {
             goods.setQuantity(0);
 
             try {
-                TCPServer.sendMessage("We are sending only " + quantity + " of them " + name + " computers ," + " others will be send as soon as we get them");
+                TCPServer.sendMessage("We are sending only " + q + " of " + name + " computers ," + " others will be sent as soon as we get them\n");
             } catch (Exception ex) {
                 ex.getStackTrace();
             }
@@ -105,8 +103,7 @@ public class OrdersServiceImpl implements OrdersServiceInter {
         } else if (q == 0) {
             addOrder(goods, quantity);
             try {
-                TCPServer.sendMessage("We don't have any " + name + " computers in warehouse ," + "  we will send\n"
-                        + " the goods as soon as we get them ");
+                TCPServer.sendMessage("We don't have any " + name + " computers in warehouse ," + "  we will send the goods as soon as we get them\n ");
             } catch (Exception ex) {
                 ex.getStackTrace();
             }

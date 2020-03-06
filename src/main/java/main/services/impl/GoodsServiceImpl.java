@@ -10,7 +10,6 @@ import main.dao.GoodsRepository;
 import main.dao.OrdersRepository;
 import main.dto.GoodsDTO;
 import main.entities.Goods;
-import main.entities.Orders;
 import main.services.inter.GoodsServiceInter;
 import org.springframework.stereotype.Service;
 
@@ -108,38 +107,5 @@ public class GoodsServiceImpl implements GoodsServiceInter {
         return false;
     }
 
-//    @Override
-//    public Integer sendGoods(String name, Integer quantity) {
-//        Goods goods = goodsRepository.findByName(name);
-//        int q = goods.getQuantity();
-//        if (q >= quantity) {
-//            int newQuantity = q - quantity;
-//            goods.setQuantity(newQuantity);
-//            goodsRepository.save(goods);
-//            return quantity;
-//        } else if (q < quantity && q > 0) {
-//            int newQuantity = quantity - q;
-//
-//            Orders order = new Orders();
-//            order.setGoodsId(goods);
-//            order.setOQuantity(newQuantity);
-//            ordersRepository.save(order);
-//
-//            goods.setQuantity(0);
-//
-//            goodsRepository.save(goods);
-//            return q; // if q < quantity , then send all goods which are in warehouse 
-//        } else if (q == 0) {
-//            Orders order = new Orders();
-//            order.setGoodsId(goods);
-//            order.setOQuantity(quantity);
-//
-//            System.out.println("goods id " + order.getGoodsId().getId() + "quantity " + order.getOQuantity());
-//            ordersRepository.save(order);
-//            return 0;
-//        }
-//
-//        return 0;
-//    }
 
 }

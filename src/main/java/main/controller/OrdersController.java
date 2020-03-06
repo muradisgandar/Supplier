@@ -5,6 +5,7 @@
  */
 package main.controller;
 
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import main.dto.ResponseDTO;
 import main.entities.Orders;
@@ -35,6 +36,7 @@ public class OrdersController {
     }
 
     @GetMapping
+    @ApiOperation(value = "get goods from database")
     public ResponseEntity orders() {
         List<Orders> orders = ordersServiceInter.getAllOrders();
         if (orders != null && !orders.isEmpty()) {
@@ -46,6 +48,7 @@ public class OrdersController {
     }
 
     @GetMapping(path = "/{id}")
+    @ApiOperation(value = "get goods which are defined by id from database")
     public ResponseEntity orderById(@PathVariable(value = "id") Integer id) {
         Orders order = ordersServiceInter.getOrderById(id);
         if (order != null) {
@@ -56,6 +59,7 @@ public class OrdersController {
     }
     
     @DeleteMapping(value = "/{id}")
+    @ApiOperation(value = "delete goods which are identified by sending id")
     public ResponseEntity deleteGoods(@PathVariable(value = "id") Integer id) {
         if (ordersServiceInter.deleteOrder(id)) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(("Goods by id = " + id + " are deleted successfully"), 200, ("Goods' id = " + id)));
